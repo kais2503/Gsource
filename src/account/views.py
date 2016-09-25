@@ -1,5 +1,4 @@
 from rest_framework.generics import ListAPIView,RetrieveUpdateAPIView,RetrieveAPIView,RetrieveDestroyAPIView,CreateAPIView
-from rest_framework.mixins import UpdateModelMixin
 from .serializers import AccountListSerializer,AccountUpdateSerializer,AccountDetailSerializer,AccountCreateSerializer
 from .models import Account
 
@@ -15,3 +14,6 @@ class AccountDelete(RetrieveDestroyAPIView):
 class AccountCreate(CreateAPIView):
     queryset=Account.objects.all()
     serializer_class=AccountCreateSerializer
+class AccountDetail(RetrieveAPIView):
+    queryset=Account.objects.all()
+    serializer_class=AccountDetailSerializer

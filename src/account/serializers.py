@@ -6,10 +6,7 @@ from User.serializers import UserListSerializers
 
 User=get_user_model()
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=User
-        fields=['username','first_name','last_name','email','password','is_active','is_superuser']
+
 
 
 
@@ -23,12 +20,13 @@ class AccountListSerializer(serializers.ModelSerializer):
         model= Account
         fields=['id','username','image',]
 class AccountDetailSerializer(serializers.ModelSerializer):
+    user=UserListSerializers()
+    image=serializers.ImageField()
 
-    username=serializers.CharField(source ='my_user.username')
     class Meta:
 
         model= Account
-        fields=['id','username','image',]
+        fields=['id','user','image',]
 class AccountCreateSerializer(serializers.ModelSerializer):
 
 
@@ -42,12 +40,11 @@ class AccountCreateSerializer(serializers.ModelSerializer):
         fields=['id','user','image']
     def create(self,validated_data):
 
-        user_data=validated_data.pop('user')
-        print(user_data)
-        account=Account.objects.create(**validated_data)
-        User.objects.create(account=account,**user_data)
+          user_data = validated_data.pop('user')
+          user = User.objects.create(**user_data)
+          account = Account.objects.create(user=user, **validated_data)
 
-        return account
+          return account
 
 
 
@@ -59,13 +56,7 @@ class AccountUpdateSerializer(serializers.ModelSerializer):
         model=Account
         fields=['id','user','image',]
     def update(self, instance, validated_data):
-
-
-
-        #instance.user=validated_data.get('user', instance.user)
         instance.image = validated_data.get('image', instance.image)
-            #instance.my_user.username=validated_data.get('my_user.username' ,instance.my_user.username)
-
         instance.save()
 
         return instance

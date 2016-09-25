@@ -11,4 +11,4 @@ class ProjectListSerializer(ModelSerializer):
 class ProjectCreateUpdateSerializer(ModelSerializer):
     class Meta:
         model =Project
-        fields=['titre','description','date']
+        fields=['titre','description','date',]
